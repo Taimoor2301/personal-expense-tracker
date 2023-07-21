@@ -9,6 +9,8 @@ let Form = (props) => {
     id: "",
   };
   let [formData, setFormData] = useState(obj);
+  let [redTitle, setRedTitle] = useState("");
+  let [redPrice, setRedPrice] = useState("");
 
   let handleChange = (e) => {
     setFormData((prev) => {
@@ -22,15 +24,21 @@ let Form = (props) => {
     if (formData.title != "" && formData.price != "") {
       formData.id = Math.floor(Math.random() * 1000);
       props.dataTransferFunction(formData);
+      setFormData(obj);
+      setRedPrice("");
+      setRedTitle("");
+    } else if (formData.title === "") {
+      setRedTitle("danger");
+    } else if (formData.price === "") {
+      setRedPrice("danger");
     }
-
-    setFormData(obj);
   }
 
   return (
     <form className="form" onSubmit={handleSubmit}>
       <h1>Input Info</h1>
       <input
+        className={redTitle}
         type="text"
         placeholder="Title"
         value={formData.title}
@@ -40,6 +48,7 @@ let Form = (props) => {
 
       <input
         type="text"
+        className={redPrice}
         placeholder="Price"
         value={formData.price}
         name="price"
@@ -53,9 +62,10 @@ let Form = (props) => {
         name="date"
         onChange={handleChange}
       ></input>
-
-      <button>Create</button>
-      <button onClick={props.clear}>Clear All</button>
+      <div>
+        <button>Create</button>
+        <button onClick={props.clear}>Clear All</button>
+      </div>
     </form>
   );
 };

@@ -23,7 +23,8 @@ let App = () => {
   }
 
   function deleteItem(id) {
-    console.log(`id to be deleted = ${id}`);
+    let newData = data.filter((obj) => obj.id !== id);
+    setData(newData);
   }
 
   return (
