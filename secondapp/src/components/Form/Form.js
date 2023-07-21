@@ -2,68 +2,60 @@ import "./Form.css";
 import { useState } from "react";
 
 let Form = (props) => {
-  // making variables to store input data
-  const [enterTitle, setEnterTitle] = useState("");
-  const [enterAmount, setEnterAmount] = useState("");
-  const [enterDate, setEnterDate] = useState("");
-
-  //   functions that assign input values to created variales
-
-  let titleChangeHandler = (event) => {
-    setEnterTitle(event.target.value);
+  const obj = {
+    title: "",
+    price: "",
+    date: "",
+    id: "",
   };
-  let amountChangeHandler = (event) => {
-    setEnterAmount(event.target.value);
-  };
-  let dateChangeHandler = (event) => {
-    setEnterDate(event.target.value);
+  let [formData, setFormData] = useState(obj);
+
+  let handleChange = (e) => {
+    setFormData((prev) => {
+      return { ...prev, [e.target.name]: e.target.value };
+    });
   };
 
-  //    function that stops reloading of page and store collected data into an object
+  function handleSubmit(e) {
+    e.preventDefault();
 
-  let submitHandler = (event) => {
-    event.preventDefault();
-
-    const collectedData = {
-      title: enterTitle,
-      amount: enterAmount,
-      date: enterDate,
-    };
-
-    // checking if any of collected data is empty
-
-    if (
-      collectedData.title != "" &&
-      collectedData.amount != "" &&
-      collectedData.date != ""
-    ) {
-      props.dataTransferFunction(collectedData); // transfer collected data to parent
+    if (formData.title != "" && formData.price != "") {
+      formData.id = Math.floor(Math.random() * 1000);
+      props.dataTransferFunction(formData);
     }
 
-    setEnterTitle(""); // setting input fields back to empty.
-    setEnterAmount("");
-    setEnterDate("");
-  };
+    setFormData(obj);
+  }
 
   return (
-    <form className="form" onSubmit={submitHandler}>
+    <form className="form" onSubmit={handleSubmit}>
       <h1>Input Info</h1>
       <input
         type="text"
         placeholder="Title"
-        onChange={titleChangeHandler} // change events that track changes
+        value={formData.title}
+        name="title"
+        onChange={handleChange}
       ></input>
+
       <input
         type="text"
-        placeholder="Amount"
-        onChange={amountChangeHandler}
+        placeholder="Price"
+        value={formData.price}
+        name="price"
+        onChange={handleChange}
       ></input>
+
       <input
         type="date"
         placeholder="Date"
-        onChange={dateChangeHandler}
+        value={formData.date}
+        name="date"
+        onChange={handleChange}
       ></input>
+
       <button>Create</button>
+      <button onClick={props.clear}>Clear All</button>
     </form>
   );
 };

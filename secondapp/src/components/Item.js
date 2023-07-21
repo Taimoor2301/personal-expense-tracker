@@ -2,6 +2,7 @@ import React from "react";
 import "./Item.css";
 
 let Item = (props) => {
+  console.log(props.id);
   return (
     <div className="item">
       <div className="date_title">
@@ -10,9 +11,8 @@ let Item = (props) => {
         </div>
         <h2>{props.data.title}</h2>
       </div>
-
       <div className="amount">
-        <b>Amount </b> : ${props.data.amount}
+        <b>Price </b> :{props.data.price} Rs
       </div>
     </div>
   );

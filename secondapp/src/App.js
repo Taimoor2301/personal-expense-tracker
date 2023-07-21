@@ -7,8 +7,7 @@ let App = () => {
     JSON.parse(localStorage.getItem("oldData")) || []
   );
   function getCollectedData(transferedData) {
-    let newData = { ...transferedData, id: Math.random().toString() };
-    setData([newData]);
+    setData((prev) => [transferedData, ...prev]);
   }
 
   useEffect(
@@ -18,15 +17,22 @@ let App = () => {
     [data]
   );
 
+  function clear() {
+    localStorage.removeItem("oldData");
+    setData([]);
+  }
+
   return (
     <div>
-      <Form dataTransferFunction={getCollectedData} />{" "}
-      {/*sending function to child for data*/}
-      <div className="card">
-        {data.map((item) => (
-          <Item data={item} />
-        ))}
-      </div>
+      <Form dataTransferFunction={getCollectedData} clear={clear} />
+
+      {data && (
+        <div className="card">
+          {data.map((item) => (
+            <Item data={item} key={item.id} id={item.id} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
