@@ -1,13 +1,34 @@
-import MainApp from "./dataTransfere";
+import React, { useEffect, useState } from "react";
+import Item from "./components/Item";
+import Form from "./components/Form/Form";
 
-import React from "react";
+let App = () => {
+  let [data, setData] = useState(
+    JSON.parse(localStorage.getItem("oldData")) || []
+  );
+  function getCollectedData(transferedData) {
+    let newData = { ...transferedData, id: Math.random().toString() };
+    setData([newData]);
+  }
 
-function App() {
+  useEffect(
+    function () {
+      localStorage.setItem("oldData", JSON.stringify(data));
+    },
+    [data]
+  );
+
   return (
     <div>
-      <MainApp />
+      <Form dataTransferFunction={getCollectedData} />{" "}
+      {/*sending function to child for data*/}
+      <div className="card">
+        {data.map((item) => (
+          <Item data={item} />
+        ))}
+      </div>
     </div>
   );
-}
+};
 
 export default App;
