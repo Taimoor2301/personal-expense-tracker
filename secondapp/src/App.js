@@ -22,6 +22,10 @@ let App = () => {
     setData([]);
   }
 
+  function deleteItem(id) {
+    console.log(`id to be deleted = ${id}`);
+  }
+
   return (
     <div>
       <Form dataTransferFunction={getCollectedData} clear={clear} />
@@ -29,7 +33,12 @@ let App = () => {
       {data && (
         <div className="card">
           {data.map((item) => (
-            <Item data={item} key={item.id} id={item.id} />
+            <Item
+              data={item}
+              key={item.id}
+              id={item.id}
+              deleteItem={deleteItem}
+            />
           ))}
         </div>
       )}

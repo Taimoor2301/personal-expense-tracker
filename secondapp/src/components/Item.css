@@ -69,28 +69,12 @@ body {
   align-items: center;
   flex-direction: column;
 }
-
-.form {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.form input {
-  padding: 10px;
-  border: none;
-  border-radius: 10px;
+button {
+  padding: 0.5rem 1rem;
   font-family: poppins;
-  border: 2px solid black;
-  box-shadow: 1px 2px 5px grey;
-}
-.form input:focus {
-  outline: none;
-}
-.form button {
-  padding: 10px;
-  margin: 0;
   font-weight: bold;
-  background-color: #ffffff;
-  border-radius: 20px;
-  box-shadow: 1px 2px 5px grey;
+  font-size: 1rem;
+  border: none;
+  box-shadow: 1px 2px 5px black;
+  border-radius: 1rem;
 }

@@ -2,7 +2,6 @@ import React from "react";
 import "./Item.css";
 
 let Item = (props) => {
-  console.log(props.id);
   return (
     <div className="item">
       <div className="date_title">
@@ -14,6 +13,13 @@ let Item = (props) => {
       <div className="amount">
         <b>Price </b> :{props.data.price} Rs
       </div>
+      <button
+        onClick={() => {
+          props.deleteItem(props.id);
+        }}
+      >
+        Delete
+      </button>
     </div>
   );
 };
