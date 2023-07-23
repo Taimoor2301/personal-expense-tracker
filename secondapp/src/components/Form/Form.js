@@ -1,4 +1,3 @@
-import "./Form.css";
 import { useState } from "react";
 
 let Form = (props) => {
