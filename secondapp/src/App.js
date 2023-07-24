@@ -45,23 +45,24 @@ let App = () => {
     );
   }
 
+  let DataItem = () => {
+    return data.map((item) => (
+      <Item
+        data={item}
+        key={item.id}
+        id={item.id}
+        deleteItem={deleteItem}
+        editItem={editItem}
+      />
+    ));
+  };
   return (
     <div>
       <Form dataTransferFunction={getCollectedData} clear={clear} />
 
-      {data && (
-        <div className="card">
-          {data.map((item) => (
-            <Item
-              data={item}
-              key={item.id}
-              id={item.id}
-              deleteItem={deleteItem}
-              editItem={editItem}
-            />
-          ))}
-        </div>
-      )}
+      <div className="card">
+        {data.length > 0 ? <DataItem /> : <b>Fill the Form To Create Item</b>}
+      </div>
     </div>
   );
 };

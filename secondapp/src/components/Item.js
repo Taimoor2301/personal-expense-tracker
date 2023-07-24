@@ -1,92 +1,94 @@
 import React, { useState } from "react";
+import EditForm from "./editpannel/editForm";
 
 let Item = (props) => {
-  let [editPannel, setEditPannel] = useState("edit-pannel");
-  let [isVislible, setIsVisible] = useState(false);
-  function showEditPannel() {
-    if (!isVislible) {
-      setEditPannel("edit-pannel showEditPannel");
-      setIsVisible((prev) => !prev);
-    } else {
-      setEditPannel("edit-pannel");
-      setIsVisible((prev) => !prev);
-    }
-  }
+  // let [editPannel, setEditPannel] = useState("edit-pannel");
+  // let [isVislible, setIsVisible] = useState(false);
+  // function showEditPannel() {
+  //   if (!isVislible) {
+  //     setEditPannel("edit-pannel showEditPannel");
+  //     setIsVisible((prev) => !prev);
+  //   } else {
+  //     setEditPannel("edit-pannel");
+  //     setIsVisible((prev) => !prev);
+  //   }
+  // }
 
-  let objTemplate = {
-    id: props.id,
-    title: "",
-    price: "",
-    date: "",
+  let getData = (collectedData) => {
+    props.editItem(collectedData);
   };
 
-  let [updatedItem, setUpdatedItem] = useState(objTemplate);
+  // ------------------ controling the display of editing pannel-------------
+  let [display, setDisplay] = useState("hide");
 
-  function setUpdatedData(e) {
-    setUpdatedItem((prev) => {
-      return { ...prev, [e.target.name]: e.target.value };
-    });
+  let controlDisplay = () => {
+    setDisplay("show");
+  };
+
+  // ---------------cancel button-------------------
+  let abortEditing = () => {
+    setDisplay("hide");
+    setContent(<Buttons />);
+  };
+  // ------------------ setting up content for edit pannel-------------------
+
+  let Buttons = () => {
+    return (
+      <div className="buttons-container">
+        <button
+          onClick={() => {
+            props.deleteItem(props.id);
+          }}
+        >
+          Delete
+        </button>
+
+        <button onClick={changeContent}>Edit</button>
+      </div>
+    );
+  };
+
+  let [content, setContent] = useState(<Buttons />);
+
+  function changeContent() {
+    setContent(
+      <EditForm abortEditing={abortEditing} id={props.id} getData={getData} />
+    );
   }
-
-  function passCollectedData(event) {
-    event.preventDefault();
-    props.editItem(updatedItem);
-    setUpdatedItem(objTemplate);
-    setEditPannel("edit-pannel");
-    setIsVisible((prev) => !prev);
-  }
-
+  // -------------------------------------------------------------------------------------
   return (
     <div className="item-container">
-      <div className="item">
-        <div className="date_title">
-          <div className="date">
-            Date : <span>{props.data.date}</span>
-          </div>
-          <h2>{props.data.title}</h2>
-        </div>
+      <div className="item" onClick={controlDisplay}>
+        <h2 className="title">{props.data.title}</h2>
 
         <div className="amount">
           <b>Price :{props.data.price} Rs</b>
         </div>
-        <div className="buttons-container">
-          <button
-            onClick={() => {
-              props.deleteItem(props.id);
-            }}
-          >
-            Delete
-          </button>
-
-          <button onClick={showEditPannel}>Edit</button>
+        <div className="date">
+          Date : <span>{props.data.date}</span>
         </div>
       </div>
-      <form className={editPannel} onSubmit={passCollectedData}>
-        <input
-          type="text"
-          placeholder="New Title"
-          name="title"
-          onChange={setUpdatedData}
-          value={updatedItem.title}
-        ></input>
-        <input
-          type="text"
-          name="price"
-          placeholder="New Ammount"
-          onChange={setUpdatedData}
-          value={updatedItem.price}
-        ></input>
-        <input
-          type="date"
-          name="date"
-          placeholder="New Date"
-          onChange={setUpdatedData}
-          value={updatedItem.date}
-        ></input>
-        <button>Set</button>
-      </form>
+      {/* --------------buttons here----------- */}
+
+      <div className={display}>{content}</div>
     </div>
   );
 };
 
 export default Item;
+
+{
+  /* <div className="buttons-container">
+        <button
+          onClick={() => {
+            props.deleteItem(props.id);
+          }}
+        >
+          Delete
+        </button>
+
+        <button onClick={showEditPannel}>Edit</button>
+      </div>
+      
+      <EditForm editPannel={editPannel} id={props.id} getData={getData} /> */
+}
