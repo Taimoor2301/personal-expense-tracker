@@ -2,33 +2,42 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 import Item from "./components/Item";
 import Form from "./components/Form/Form";
+import AddButton from "./components/addButton";
+import {
+  addDoc,
+  onSnapshot,
+  doc,
+  deleteDoc,
+  setDoc,
+  collection,
+} from "firebase/firestore";
+import { db, itemCollection } from "./firebase";
 
 let App = () => {
-  let [data, setData] = useState(
-    JSON.parse(localStorage.getItem("oldData")) || []
-  );
-  function getCollectedData(transferedData) {
-    setData((prev) => [transferedData, ...prev]);
+  let [data, setData] = useState([]);
+  // ====================================================================
+  async function getCollectedData(transferedData) {
+    const newItemRef = await addDoc(itemCollection, transferedData);
   }
 
-  useEffect(
-    function () {
-      localStorage.setItem("oldData", JSON.stringify(data));
-    },
-    [data]
-  );
+  useEffect(() => {
+    const unsubscribe = onSnapshot(itemCollection, function (snapshot) {
+      const itemsArr = snapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+      setData(itemsArr);
+    });
+    return unsubscribe;
+  }, []);
+  // ----------------------------------------------
 
-  function clear() {
-    localStorage.removeItem("oldData");
-    setData([]);
+  async function deleteItem(id) {
+    const docRef = doc(db, "items", id);
+    await deleteDoc(docRef);
   }
 
-  function deleteItem(id) {
-    let newData = data.filter((obj) => obj.id !== id);
-    setData(newData);
-  }
-
-  function editItem({ id, title, price, date }) {
+  async function editItem({ id, title, price, date }) {
     let targetObject = data.filter((obj) => obj.id === id);
 
     let updatedTargetObject = {
@@ -38,28 +47,41 @@ let App = () => {
       date: date ? date : targetObject[0].date,
     };
 
-    setData((prev) =>
-      prev.map((item) => {
-        return item.id === id ? updatedTargetObject : item;
-      })
-    );
+    const docRef = doc(db, "items", id);
+
+    await setDoc(docRef, updatedTargetObject);
   }
 
   let DataItem = () => {
     return data.map((item) => (
       <Item
-        data={item}
         key={item.id}
         id={item.id}
+        data={item}
         deleteItem={deleteItem}
         editItem={editItem}
       />
     ));
   };
-  return (
-    <div>
-      <Form dataTransferFunction={getCollectedData} clear={clear} />
 
+  const [createItem, setCreateItem] = useState(false);
+
+  function addItem() {
+    setCreateItem((prev) => !prev);
+  }
+  return (
+    <div className="container">
+      <h1 className="heading">Personal Expense Tracker</h1>
+      <div className="containerTop">
+        {!createItem ? (
+          <AddButton addItem={addItem} />
+        ) : (
+          <Form
+            dataTransferFunction={getCollectedData}
+            setCreateItem={setCreateItem}
+          />
+        )}
+      </div>
       <div className="card">
         {data.length > 0 ? <DataItem /> : <b>Fill the Form To Create Item</b>}
       </div>

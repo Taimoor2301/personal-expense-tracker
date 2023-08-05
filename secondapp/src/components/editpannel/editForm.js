@@ -35,7 +35,7 @@ export default function EditForm(props) {
         value={updatedItem.title}
       ></input>
       <input
-        type="text"
+        type="number"
         name="price"
         placeholder="New Ammount"
         onChange={setUpdatedData}
@@ -48,10 +48,12 @@ export default function EditForm(props) {
         onChange={setUpdatedData}
         value={updatedItem.date}
       ></input>
-      <button type="submit">Set</button>
-      <button type="button" onClick={props.abortEditing}>
-        Cancel
-      </button>
+      <div className="buttons-container">
+        <button type="submit">Set</button>
+        <button type="button" onClick={props.abortEditing}>
+          Cancel
+        </button>
+      </div>
     </form>
   );
 }

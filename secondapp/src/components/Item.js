@@ -2,18 +2,6 @@ import React, { useState } from "react";
 import EditForm from "./editpannel/editForm";
 
 let Item = (props) => {
-  // let [editPannel, setEditPannel] = useState("edit-pannel");
-  // let [isVislible, setIsVisible] = useState(false);
-  // function showEditPannel() {
-  //   if (!isVislible) {
-  //     setEditPannel("edit-pannel showEditPannel");
-  //     setIsVisible((prev) => !prev);
-  //   } else {
-  //     setEditPannel("edit-pannel");
-  //     setIsVisible((prev) => !prev);
-  //   }
-  // }
-
   let getData = (collectedData) => {
     props.editItem(collectedData);
   };
@@ -57,16 +45,12 @@ let Item = (props) => {
   }
   // -------------------------------------------------------------------------------------
   return (
-    <div className="item-container">
-      <div className="item" onClick={controlDisplay}>
+    <div className="item-container" onClick={controlDisplay}>
+      <div className="item">
         <h2 className="title">{props.data.title}</h2>
 
-        <div className="amount">
-          <b>Price :{props.data.price} Rs</b>
-        </div>
-        <div className="date">
-          Date : <span>{props.data.date}</span>
-        </div>
+        <div className="amount">Price :{props.data.price} Rs</div>
+        <div className="date">Date :{props.data.date}</div>
       </div>
       {/* --------------buttons here----------- */}
 
@@ -76,19 +60,3 @@ let Item = (props) => {
 };
 
 export default Item;
-
-{
-  /* <div className="buttons-container">
-        <button
-          onClick={() => {
-            props.deleteItem(props.id);
-          }}
-        >
-          Delete
-        </button>
-
-        <button onClick={showEditPannel}>Edit</button>
-      </div>
-      
-      <EditForm editPannel={editPannel} id={props.id} getData={getData} /> */
-}
